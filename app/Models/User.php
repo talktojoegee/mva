@@ -61,6 +61,10 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role');
     }
 
+    public function getMloDetails(){
+        return $this->belongsTo(MloSetup::class, 'mlo_id');
+    }
+
 
     public function getUserChurchBranch(){
         return $this->belongsTo(ChurchBranch::class, 'branch');
@@ -161,6 +165,10 @@ class User extends Authenticatable
     }
     public function getUserById($id){
         return User::find( $id);
+    }
+
+    public function getUserByIds($ids){
+        return User::whereIn('id', $ids)->get();
     }
 
     public function uploadProfilePicture($avatarHandler){
@@ -296,3 +304,6 @@ class User extends Authenticatable
     }*/
 
 }
+
+
+

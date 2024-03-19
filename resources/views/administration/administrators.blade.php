@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    Manage Pastors
+    Manage Users
 @endsection
 @section('extra-styles')
 
@@ -44,8 +44,8 @@
             <div class="col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Manage Pastors</h4>
-                        <a href="{{route('add-new-pastor')}}"  class="btn btn-primary  mb-3">Add New Pastor <i class="bx bxs-plus-circle"></i> </a>
+                        <h4 class="card-title">Manage Users</h4>
+                        <a href="{{route('add-new-pastor')}}"  class="btn btn-primary  mb-3">Add New User <i class="bx bxs-plus-circle"></i> </a>
                     </div>
                     <div class="card-body">
                         <div class="row">

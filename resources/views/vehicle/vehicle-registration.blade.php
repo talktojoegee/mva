@@ -93,6 +93,7 @@
                                                 <select class="form-control" name="slPurpose">
                                                     <option value="">--Select--</option>
                                                     <option value="1">Personal</option>
+                                                    <option value="2">Commercial</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -135,7 +136,7 @@
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-md-12 col-lg-12 d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-primary  ">Next to Continue</button>
+                                            <button type="submit" class="btn btn-primary  ">Save & Continue</button>
                                         </div>
                                     </div>
                                 </form>

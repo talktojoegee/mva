@@ -12,6 +12,10 @@ class ProductCategory extends Model
 {
     use HasFactory;
 
+    public function getProducts(){
+        return $this->hasMany(Product::class, "category_id");
+    }
+
     public function addProductCategory(Request $request){
         $cat = new ProductCategory();
         $cat->org_id = Auth::user()->org_id;

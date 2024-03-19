@@ -64,10 +64,7 @@ class CloudStorageController extends Controller
 
     public function downloadAttachment(Request $request){
         try{
-            //return dd($request->all());
             return $this->file->downloadFile($request->slug);
-            /*session()->flash("success", "Processing request...");
-            return back();*/
         }catch (\Exception $ex){
             session()->flash("error", "Whoops! File does not exist.");
             return back();

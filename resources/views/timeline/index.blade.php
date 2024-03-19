@@ -91,9 +91,10 @@
                                             </div>
 
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="text-truncate font-size-15">{{$post->p_title ?? '' }}</h5>
-                                                <p class="text-muted">Separate existence is a myth. For science, music,
-                                                    sport, etc.</p>
+                                                <h5 class="text-truncate font-size-15">
+                                                    <a href="{{ route('read-timeline-post', $post->p_slug) }}">{{$post->p_title ?? '' }}</a>
+                                                </h5>
+                                                <p class="text-muted"> <i class="bx bx-user align-middle text-info me-1"></i> {{ $post->getAuthor->title ?? ''  }} {{ $post->getAuthor->first_name ?? ''  }} {{ $post->getAuthor->last_name ?? ''  }} | <i class="bx bx-calendar align-middle text-danger me-1"></i> {{ date('d M, Y h:i a', strtotime($post->created_at)) }}</p>
                                             </div>
                                         </div>
                                         <div class="dropdown">
@@ -195,6 +196,41 @@
                             <div class="">
                                 <div class="modal-header">
                                     <h6 class="tx-11 fw-bolder text-uppercase">Upcoming Birthdays</h6>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row ms-0 me-0 mb-3" style="border-bottom: 1px solid #cccdd1;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <img class="rounded avatar-sm" src="assets/images/users/avatar-5.jpg"
+                                                 alt="Generic placeholder image">
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="fs-14">Pastor Chukwuemeka Oluwaleseun Yusuf Adams</h6>
+                                            <p class="mb-0">15th December</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ms-0 me-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <img class="rounded avatar-sm" src="assets/images/users/avatar-5.jpg"
+                                                 alt="Generic placeholder image">
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="fs-14">Pastor Chukwuemeka Oluwaleseun Yusuf Adams</h6>
+                                            <p class="mb-0">15th December</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="">
+                                <div class="modal-header">
+                                    <h6 class="tx-11 fw-bolder text-uppercase">Upcoming Events</h6>
                                 </div>
                             </div>
                             <div class="card-body">

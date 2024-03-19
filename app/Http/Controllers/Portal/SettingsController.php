@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers\Portal;
 
+use App\Models\Lga;
+use App\Models\MloSetup;
+use App\Models\PlateType;
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\Station;
+use App\Models\VehicleBrand;
+use App\Models\VehicleModel;
 use Spatie\Permission\Models\Role as SRole;
 //use Spatie\Permission\Models\Permission as SPermission;
 
@@ -40,6 +48,15 @@ class SettingsController extends Controller
         $this->modulemanager = new ModuleManager();
         $this->permission = new Permission();
         $this->role = new Role();
+
+        $this->lga = new Lga();
+        $this->platetype = new PlateType();
+        $this->productcategory = new ProductCategory();
+        $this->product = new Product();
+        $this->station = new Station();
+        $this->mlosetup = new MloSetup();
+        $this->vehiclebrand = new VehicleBrand();
+        $this->vehiclemodel = new VehicleModel();
     }
 
     public function showSettingsView(){
@@ -453,6 +470,224 @@ class SettingsController extends Controller
         ]);
         $this->organization->uploadFavicon($request->favicon);
         session()->flash("success", "Your favicon was uploaded.");
+        return back();
+    }
+
+
+
+    /*
+     *
+     *
+     * Motor Vehicle Administration System Settings
+     *
+     *
+     *
+     */
+
+    public function showLGASetupForm(){
+        return view('settings.settings-lgas',[
+            'lgas'=>$this->lga->getAllLGAs()
+        ]);
+    }
+    public function storeLGA(Request $request){
+        $this->validate($request,[
+            "lgaName"=>"required",
+            "lgaCode"=>"required",
+        ],[
+            "lgaName.required"=>"What will you call this LGA?",
+            "lgaCode.required"=>"Assign a code to this LGA",
+        ]);
+        try{
+            $this->lga->addLGA($request, Auth::user()->id);
+            session()->flash("success", "You've successfully added a new LGA code");
+            return back();
+        }catch (\Exception $exception){
+            session()->flash("error", "Whoops! Something went wrong. Try again later or contact admin.");
+            return back();
+        }
+
+
+    }
+
+    public function editLGA(Request $request){
+        $this->validate($request,[
+            "lgaName"=>"required",
+            "lgaCode"=>"required",
+            "lgaId"=>"required"
+        ],[
+            "lgaName.required"=>"What will you call this LGA?",
+            "lgaCode.required"=>"Assign a code to this LGA",
+        ]);
+        try{
+            $this->lga->editLGA($request);
+            session()->flash("success", "Success! Your changes were saved.");
+            return back();
+        }catch (\Exception $exception){
+            session()->flash("error", "Whoops! Something went wrong. Try again later or contact admin.");
+            return back();
+        }
+    }
+
+    public function showPlateTypeView(){
+        return view('settings.settings-plate-type',[
+            'plates'=>$this->platetype->getAllPlateTypes()
+        ]);
+    }
+
+    public function storePlateType(Request $request){
+        $this->validate($request,[
+            "plateType"=>"required",
+            "cost"=>"required",
+        ],[
+            "plateType.required"=>"Plate type is required",
+            "cost.required"=>"What's the cost of this plate?",
+        ]);
+        try{
+            $this->platetype->addPlateType($request);
+            session()->flash("success", "Action successful!");
+            return back();
+        }catch (\Exception $exception){
+            session()->flash("error", "Whoops! Something went wrong. Try again later or contact admin.");
+            return back();
+        }
+
+
+    }
+
+
+    public function editPlateType(Request $request){
+        $this->validate($request,[
+            "plateType"=>"required",
+            "cost"=>"required",
+            "plateId"=>'required'
+        ],[
+            "plateType.required"=>"Plate type is required",
+            "cost.required"=>"What's the cost of this plate?",
+        ]);
+        try{
+            $this->platetype->editPlateType($request);
+            session()->flash("success", "Success! Your changes were saved.");
+            return back();
+        }catch (\Exception $exception){
+            session()->flash("error", "Whoops! Something went wrong. Try again later or contact admin.");
+            return back();
+        }
+    }
+
+
+    public function showProductCategory(){
+        return view('settings.settings-product-category',[
+            'categories'=>$this->productcategory->getAllOrgProductCategories(),
+            'products'=>$this->product->getAllOrgProducts()
+            ]);
+    }
+
+
+
+    public function showStation()
+    {
+        return view('settings.settings-station',[
+            'stations'=>$this->station->getAllStations(),
+        ]);
+    }
+
+    public function editStation(Request $request){
+        $this->validate($request,[
+            'stationName'=>'required',
+            'stationId'=>'required',
+        ],[
+            "name.required"=>"What's the name for this station?"
+        ]);
+        $this->station->editStation($request);
+        session()->flash("success", "Your changes were saved!");
+        return back();
+    }
+
+    public function addStation(Request $request){
+        $this->validate($request,[
+            'stationName'=>'required',
+        ],[
+            "stationName.required"=>"Enter station name",
+        ]);
+        $this->station->addStation($request);
+        session()->flash("success", "Your station was added!");
+        return back();
+    }
+
+
+    public function showMloSetups(){
+        return view('settings.settings-mlo-setup',[
+            'mlos'=>$this->mlosetup->getMloSetups(),
+            'stations'=>$this->station->getAllStations(),
+            'users'=>$this->user->getAllOrgUsersByIsAdmin(1)
+        ]);
+    }
+
+
+    public function addMloSetup(Request $request){
+        $this->validate($request,[
+            "station"=>"required",
+            /*"lastName"=>"required",
+            "firstName"=>"required",
+            "phoneNo"=>"required",
+            "email"=>"required",*/
+        ],[
+            "station.required"=>"Select station from the options provided",
+            /*"lastName.required"=>"What's the last name?'",
+            "firstName.required"=>"First name is equally important.",
+            "phoneNo.required"=>"Let's have the person's phone number",
+            "email.required"=>"We need a functional email address to move forward with this.",*/
+        ]);
+        $user = $this->user->getUserById($request->user);
+        if(empty($user)){
+            abort(404);
+        }
+        //$this->mlosetup->addNewMLO($request);
+       $mlo =  $this->mlosetup->addRecord($request->station, $user->first_name, $user->last_name ?? null,
+            $user->other_names ?? null, $user->email, $user->cellphone_no, $request->mloId);
+        $user->mlo_id = $mlo->ms_id;
+        $user->save();
+        session()->flash("success", "Success! New MLO added to the system.");
+        return back();
+    }
+
+    public function showVehicleBrands(){
+        return view('settings.settings-vehicle-brand',[
+            'brands'=>$this->vehiclebrand->getVehicleBrands()
+        ]);
+    }
+    public function showVehicleModels(){
+        return view('settings.settings-vehicle-model',[
+            'brands'=>$this->vehiclebrand->getVehicleBrands(),
+            'models'=>$this->vehiclemodel->getVehicleModels(),
+        ]);
+    }
+
+
+    public function addVehicleModel(Request $request){
+        $this->validate($request,[
+            "modelName"=>"required",
+            "brand"=>"required",
+        ],[
+            "modelName.required"=>"Enter model name",
+            "brand.required"=>"Choose brand",
+        ]);
+        $this->vehiclemodel->addModel($request);
+        session()->flash("success", "Success! New vehicle model added to the system.");
+        return back();
+    }
+
+    public function editVehicleModel(Request $request){
+        $this->validate($request,[
+            "modelName"=>"required",
+            "brand"=>"required",
+            "modelId"=>"required"
+        ],[
+            "modelName.required"=>"Enter model name",
+            "brand.required"=>"Choose brand",
+        ]);
+        $this->vehiclemodel->editModel($request);
+        session()->flash("success", "Success! Your changes were saved.");
         return back();
     }
 

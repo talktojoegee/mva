@@ -81,4 +81,13 @@ class Post extends Model
 
 
 
+    public function getPostsByIds($postIds){
+        return Post::whereIn('p_id', $postIds)->orderBy('p_id', 'DESC')->get();
+    }
+
+    public function getCorrespondenceByPostId($postId){
+        return PostCorrespondingPerson::where('pcp_post_id', $postId)->first();
+    }
+
+
 }

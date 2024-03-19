@@ -19,11 +19,7 @@
     <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
     {{--<link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />--}}
     {{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
-    <style>
-        #sidebar-menu ul li a i, body[data-sidebar=dark] #sidebar-menu ul li a{
-            color: #ffffff !important;
-        }
-    </style>
+
 
     @yield('extra-styles')
 

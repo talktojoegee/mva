@@ -8,37 +8,49 @@
                 <h6>Features</h6>
             </div>
         </div>
-        <a href="{{route('organization')}}" class="{{  Request::routeIs('organization') ? 'is-active-setting' : ''}}">
+        <a href="{{route('lgas-settings')}}" class="{{  Request::routeIs('lgas-settings') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span class="">Basic Settings</span>
+                <span class="">LGA Codes</span>
             </div>
         </a>
-        <a href="{{route('settings')}}" class="{{  Request::routeIs('organization') ? 'is-active-setting' : ''}}">
+        <a href="{{route('plate-type')}}" class="{{  Request::routeIs('plate-type') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span class="">General Settings</span>
+                <span class="">Plate Types</span>
             </div>
         </a>
-        <a href="{{route('branches-settings')}}" class="{{  Request::routeIs('branches-settings') ? 'is-active-setting' : ''}}">
+        <a href="{{route('show-product-category')}}" class="{{  Request::routeIs('show-product-category') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span class="">Branch Settings</span>
+                <span class="">Product Category</span>
             </div>
         </a>
-    </div>
-    <div class="sidebar-section">
-        <div class="settings-section-header">
-            <div class="section-icon">
-                <i class="bx bx-calendar"></i>
-            </div>
-            <div class="section-title">Calendar</div>
-        </div>
-        <a href="{{route('appointment-settings')}}" class=" {{  request()->routeIs('appointment-settings') ? 'is-active-setting' : ''}}">
+        <a href="{{route('all-products')}}" class="{{  Request::routeIs('all-products') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span>Appointments</span>
+                <span class="">Products</span>
             </div>
         </a>
-        <a href="{{route('appointment-types-settings')}}" class=" {{  request()->routeIs('appointment-types-settings') ? 'is-active-setting' : ''}}">
+        <a href="{{route('mlo-stations')}}" class="{{  Request::routeIs('mlo-stations') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span>Appointment Types</span>
+                <span class="">Station</span>
+            </div>
+        </a>
+        <a href="{{route('mlo-setups')}}" class="{{  Request::routeIs('mlo-setups') ? 'is-active-setting' : ''}}">
+            <div class="sidebar-item">
+                <span class="">MLO Setups</span>
+            </div>
+        </a>
+        <a href="{{route('vehicle-brands')}}" class=" {{  request()->routeIs('vehicle-brands') ? 'is-active-setting' : ''}}">
+            <div class="sidebar-item">
+                <span>Vehicle Brands</span>
+            </div>
+        </a>
+        <a href="{{route('vehicle-models')}}" class=" {{  request()->routeIs('vehicle-models') ? 'is-active-setting' : ''}}">
+            <div class="sidebar-item">
+                <span>Vehicle Model</span>
+            </div>
+        </a>
+        <a href="{{route('settings')}}" class=" {{  request()->routeIs('settings') ? 'is-active-setting' : ''}}">
+            <div class="sidebar-item">
+                <span>User Profile</span>
             </div>
         </a>
         <a href="{{route('change-password')}}" class=" {{  request()->routeIs('change-password') ? 'is-active-setting' : ''}}">

@@ -5,19 +5,19 @@
             <div class="navbar-brand-box" style="">
                 <a href="{{route('dashboard')}}" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="/assets/images/logo.svg" alt="" height="22">
+                        <img src="/assets/drive/logo/logo.png" alt="{{ env('APP_NAME') }}" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="/assets/images/logo-dark.png" alt="" height="17">
+                        <img src="/assets/drive/logo/logo.png" alt="{{ env('APP_NAME') }}" height="17">
                     </span>
                 </a>
 
                 <a href="{{route('dashboard')}}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="/assets/images/logo-light.svg" alt="" height="22">
+                        <img src="/assets/drive/logo/logo.png" alt="{{ env('APP_NAME') }}"  height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('assets/images/'.Auth::user()->getUserOrganization->logo)}}" alt="" height="64" width="90">
+                        <img src="/assets/drive/logo/logo.png" alt="{{ env('APP_NAME') }}" height="70" width="70">
                     </span>
                 </a>
             </div>

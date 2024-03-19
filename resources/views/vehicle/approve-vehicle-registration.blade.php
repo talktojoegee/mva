@@ -65,7 +65,19 @@
                                                 <td>{{ $record->getVehicleModel->vm_name ?? '' }}</td>
                                                 <td>{{ $record->vr_chassis_no ?? '' }}</td>
                                                 <td>{{ $record->vr_engine_no ?? '' }}</td>
-                                                <td>status</td>
+                                                <td>
+                                                    @switch($record->vr_status)
+                                                        @case(0)
+                                                        <i class="text-warning">pending</i>
+                                                        @break
+                                                        @case(1)
+                                                        <i class="text-success">approved</i>
+                                                        @break
+                                                        @case(2)
+                                                        <i class="text-danger">declined</i>
+                                                        @break
+                                                    @endswitch
+                                                </td>
                                                 <td>
                                                     <div class="btn-group">
                                                         <i class="bx bx-dots-vertical dropdown-toggle text-warning" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;"></i>

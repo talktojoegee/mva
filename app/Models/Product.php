@@ -19,40 +19,43 @@ class Product extends Model
 
     public function addProduct(Request $request){
         $product = new Product();
-        $product->org_id = Auth::user()->org_id;
+        $product->org_id = 1;
         $product->added_by = Auth::user()->id;
         $product->category_id = $request->productCategory;
         $product->product_name = $request->productName;
         $product->slug = Str::slug($request->productName).'-'.Str::random(5);
         $product->cost = $request->cost ?? 0;
-        $product->price = $request->price ?? 0;
-        $product->sku = $request->sku ?? null ;
-        $product->low_inventory_notice = $request->lowInventoryNotice ?? 0;
-        $product->stock = $request->stock ?? 0;
-        $product->photo = $this->uploadProductPhoto($request->photo);
-        $product->description = $request->description ?? null;
+        //$product->price = $request->price ?? 0;
+        //$product->sku = $request->sku ?? null ;
+        //$product->low_inventory_notice = $request->lowInventoryNotice ?? 0;
+        //$product->stock = $request->stock ?? 0;
+        //$product->photo = $this->uploadProductPhoto($request->photo);
+        //$product->description = $request->description ?? null;
         $product->save();
     }
 
     public function editProduct(Request $request){
         $product =  Product::find($request->productId);
-        $product->org_id = Auth::user()->org_id;
+        $product->org_id = 1;
         $product->added_by = Auth::user()->id;
         $product->category_id = $request->productCategory;
         $product->product_name = $request->productName;
         $product->slug = Str::slug($request->productName).'-'.Str::random(5);
         $product->cost = $request->cost ?? 0;
-        $product->price = $request->price ?? 0;
         $product->sku = $request->sku ?? null ;
-        $product->low_inventory_notice = $request->lowInventoryNotice ?? 0;
-        $product->stock = $request->stock ?? 0;
-        if(isset($request->photo)) {
+        //$product->price = $request->price ?? 0;
+        //$product->low_inventory_notice = $request->lowInventoryNotice ?? 0;
+        //$product->stock = $request->stock ?? 0;
+        /*if(isset($request->photo)) {
             $product->photo = $this->uploadProductPhoto($request->photo);
-        }
-        $product->description = $request->description ?? null;
+        }*/
+        //$product->description = $request->description ?? null;
         $product->save();
     }
 
+    public function getProductsByCatId($catId){
+        return Product::where("category_id", $catId)->get();
+    }
     public function uploadProductPhoto($avatarHandler){
         return $avatarHandler->store('products', 'public');
     }

@@ -40,12 +40,38 @@ Route::group(['middleware'=>'auth'], function(){
 });
 
 Route::get('/attendance-medication-chart', [App\Http\Controllers\Portal\DashboardController::class, 'getAttendanceMedicationChart'])->name('attendance-medication-chart');
+
+#MV Settings
 Route::group(['prefix'=>'/settings', 'middleware'=>'auth'], function(){
     Route::get('/', [App\Http\Controllers\Portal\SettingsController::class, 'showSettingsView'])->name('settings');
     Route::get('/cells', [App\Http\Controllers\Portal\SettingsController::class, 'showCellsSettingsView'])->name('cells-settings');
+
+
+
+
+    Route::get('/lgas', [App\Http\Controllers\Portal\SettingsController::class, 'showLGASetupForm'])->name('lgas-settings');
+    Route::post('/lgas', [App\Http\Controllers\Portal\SettingsController::class, 'storeLGA']);
+    Route::post('/edit-lga', [App\Http\Controllers\Portal\SettingsController::class, 'editLGA'])->name('edit-lga');
+    Route::get('/plate-type', [App\Http\Controllers\Portal\SettingsController::class, 'showPlateTypeView'])->name('plate-type');
+    Route::post('/plate-type', [App\Http\Controllers\Portal\SettingsController::class, 'storePlateType']);
+    Route::post('/edit-plate-type', [App\Http\Controllers\Portal\SettingsController::class, 'editPlateType'])->name('edit-plate-type');
+    Route::get('/product-category', [App\Http\Controllers\Portal\SettingsController::class, 'showProductCategory'])->name('show-product-category');
+
+    Route::get('/stations', [App\Http\Controllers\Portal\SettingsController::class, 'showStation'])->name('mlo-stations');
+    Route::post('/add-station', [App\Http\Controllers\Portal\SettingsController::class, 'addStation'])->name('add-station');
+    Route::post('/edit-product-category', [App\Http\Controllers\Portal\SettingsController::class, 'editStation'])->name('edit-station');
+
+    Route::get('/mlo-setups', [App\Http\Controllers\Portal\SettingsController::class, 'showMloSetups'])->name('mlo-setups');
+    Route::post('/add-mlo-setup', [App\Http\Controllers\Portal\SettingsController::class, 'addMloSetup'])->name('add-mlo-setup');
+    //Route::post('/edit-product-category', [App\Http\Controllers\Portal\SettingsController::class, 'editStation'])->name('edit-station');
+
+    Route::get('/vehicle-brands', [App\Http\Controllers\Portal\SettingsController::class, 'showVehicleBrands'])->name('vehicle-brands');
+    Route::get('/vehicle-models', [App\Http\Controllers\Portal\SettingsController::class, 'showVehicleModels'])->name('vehicle-models');
+    Route::post('/add-vehicle-model', [App\Http\Controllers\Portal\SettingsController::class, 'addVehicleModel'])->name('add-vehicle-model');
+    Route::post('/edit-vehicle-model', [App\Http\Controllers\Portal\SettingsController::class, 'editVehicleModel'])->name('edit-vehicle-model');
+
     Route::get('/branches', [App\Http\Controllers\Portal\SettingsController::class, 'showBranchesSettingsView'])->name('branches-settings');
     Route::post('/branches', [App\Http\Controllers\Portal\SettingsController::class, 'storeChurchBranch']);
-    Route::post('/edit-branches', [App\Http\Controllers\Portal\SettingsController::class, 'editChurchBranch'])->name('edit-branch-settings');
     Route::get('/form', [App\Http\Controllers\Portal\SettingsController::class, 'editApptLocations'])->name('edit-appt-locations');
     Route::post('/save-account-settings', [App\Http\Controllers\Portal\SettingsController::class, 'saveAccountSettings'])->name('save-account-settings');
     Route::post('/save-notification-settings', [App\Http\Controllers\Portal\SettingsController::class, 'saveNotificationSettings'])->name('save-notification-settings');
@@ -61,6 +87,53 @@ Route::group(['prefix'=>'/settings', 'middleware'=>'auth'], function(){
     Route::post('/appt-locations', [App\Http\Controllers\Portal\SettingsController::class, 'storeApptLocations']);
     Route::post('/edit-appt-locations', [App\Http\Controllers\Portal\SettingsController::class, 'editApptLocations'])->name('edit-appt-locations');
     Route::post('/update-organization-settings', [App\Http\Controllers\Portal\SettingsController::class, 'updateOrganizationSettings'])->name('update-organization-settings');
+});
+
+Route::post('/get-vehicle-model', [App\Http\Controllers\Portal\StockController::class, 'getVehicleModel'])->name('get-vehicle-model');
+Route::post('/get-number-plate-type', [App\Http\Controllers\Portal\StockController::class, 'getNumberPlateType'])->name('get-number-plate-type');
+Route::post('/get-products', [App\Http\Controllers\Portal\VehicleRegController::class, 'getProducts'])->name('get-products');
+Route::group(['prefix'=>'/stock'], function(){
+    Route::get('/requisition', [App\Http\Controllers\Portal\StockController::class, 'showStockRequisitionForm'])->name('stock-requisition');
+    Route::get('/requisition/remove/{itemId}', [App\Http\Controllers\Portal\StockController::class, 'removeItemFromStockRequestDetail'])->name('remove-item-from-list');
+    Route::get('/approve-stock-requisition', [App\Http\Controllers\Portal\StockController::class, 'showApproveStockRequisitionForm'])->name('approve-stock-requisition');
+    Route::post('/approve-stock-requisition', [App\Http\Controllers\Portal\StockController::class, 'approveStockRequest']);
+    Route::get('/print-stock-requisition', [App\Http\Controllers\Portal\StockController::class, 'showPrintStockRequisitionView'])->name('print-stock-requisition');
+    Route::get('/print-request/{slug}', [App\Http\Controllers\Portal\StockController::class, 'showPrintRequestView'])->name('print-request');
+    Route::post('/submit-new-stock-request', [App\Http\Controllers\Portal\StockController::class, 'newStockRequest'])->name('new-stock-request');
+    Route::post('/submit-stock-requisition', [App\Http\Controllers\Portal\StockController::class, 'processStockRequisitionRequest'])->name('submit-stock-requisition');
+    Route::get('/stock-details/{slug}', [App\Http\Controllers\Portal\StockController::class, 'showStockRequestDetails'])->name('stock-details');
+
+    #Stock receipt
+    Route::get('/stock-receipt', [App\Http\Controllers\Portal\StockController::class, 'showStockReceipt'])->name('stock-receipt');
+    Route::post('/upload-stock-receipt', [App\Http\Controllers\Portal\StockController::class, 'uploadStockReceipt'])->name('upload-stock-receipt');
+    Route::get('/manage-stock-receipt', [App\Http\Controllers\Portal\StockController::class, 'manageStockReceipt'])->name('manage-stock-receipt');
+    Route::get('/stock-receipt-details/{slug}', [App\Http\Controllers\Portal\StockController::class, 'showStockReceiptDetails'])->name('stock-receipt-details');
+    Route::post('/approve-stock-receipt', [App\Http\Controllers\Portal\StockController::class, 'approveStockReceipt'])->name('approve-stock-receipt');
+
+    #Dispense to MLO
+    Route::get('/dispense-to-mlo', [App\Http\Controllers\Portal\StockController::class, 'showDispenseToMLOView'])->name('dispense-to-mlo');
+    Route::post('/dispense-to-mlo', [App\Http\Controllers\Portal\StockController::class, 'processDispenseToMLOCart']);
+    Route::post('/remove-item-from-cart', [App\Http\Controllers\Portal\StockController::class, 'removeItemFromCart'])->name('remove-item-from-cart');
+    Route::post('/dispense-items-to-mlo', [App\Http\Controllers\Portal\StockController::class, 'dispenseItemsToMLO'])->name('dispense-items-to-mlo');
+    Route::get('/approve-dispense-to-mlo-items', [App\Http\Controllers\Portal\StockController::class, 'showApproveDispenseMloView'])->name('approve-dispense-to-mlo-items');
+    Route::get('/dispense-to-mlo-items/{slug}', [App\Http\Controllers\Portal\StockController::class, 'showDispenseRequestDetails'])->name('view-dispense-to-mlo-item');
+});
+
+Route::group(["prefix"=>"/vehicle"], function(){
+   Route::get("/registration", [App\Http\Controllers\Portal\VehicleRegController::class, 'showVehicleRegistrationForm'])->name("vehicle-registration");
+    Route::post("/registration", [App\Http\Controllers\Portal\VehicleRegController::class, 'vehicleRegistration']);
+    Route::get("/owner-info/{slug}", [App\Http\Controllers\Portal\VehicleRegController::class, 'showVehicleRegistrationOwnerInfoForm'])->name("vehicle-registration-owner-info");
+    Route::post("/reg-owner-info", [App\Http\Controllers\Portal\VehicleRegController::class, 'registerOwnerInfo'])->name("reg-owner-info");
+    Route::get("/upload-documents/{slug}", [App\Http\Controllers\Portal\VehicleRegController::class, 'showUploadVehicleDocumentsForm'])->name("upload-documents");
+    Route::post("/submit-documents", [App\Http\Controllers\Portal\VehicleRegController::class, 'submitDocuments'])->name("submit-documents");
+    Route::get("/approve-vehicle-registration", [App\Http\Controllers\Portal\VehicleRegController::class, 'showApproveVehicleRegistration'])->name("approve-vehicle-registration");
+    Route::get("/continue-to-payment/{slug}", [App\Http\Controllers\Portal\VehicleRegController::class, 'showContinueToPayment'])->name("continue-to-payment");
+    Route::get("/view-vehicle-reg-details/{slug}", [App\Http\Controllers\Portal\VehicleRegController::class, 'showVehicleRegistrationDetails'])->name("view-vehicle-reg-details");
+
+    Route::post("/generate-invoice", [App\Http\Controllers\Portal\VehicleRegController::class, 'generateInvoice'])->name("generate-invoice");
+    Route::get("/view-invoice/{slug}", [App\Http\Controllers\Portal\VehicleRegController::class, 'viewInvoice'])->name("view-invoice");
+    Route::get("/manage-invoice", [App\Http\Controllers\Portal\VehicleRegController::class, 'manageInvoice'])->name("manage-invoice");
+    Route::post("/approve-invoice", [App\Http\Controllers\Portal\VehicleRegController::class, 'approveInvoice'])->name("approve-invoice");
 });
 
 Route::post('/get-states', [App\Http\Controllers\Controller::class, 'getStates'])->name('get-states');
@@ -121,12 +194,18 @@ Route::group(['prefix'=>'/tasks', 'middleware'=>'auth'], function(){
 });
 
 
-Route::group(['prefix'=>'/financials', 'middleware'=>'auth'],function(){
+Route::group(['prefix'=>'/products', 'middleware'=>'auth'],function(){
     Route::get('/', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showAllProducts'])->name('all-products');
     Route::post('/add-product-category', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'addProductCategory'])->name('add-product-category');
     Route::post('/edit-product-category', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'editProductCategory'])->name('edit-product-category');
+
+
+    Route::post('/add-product-category', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'addProductCategory'])->name('add-product-category');
+    Route::post('/edit-product-category', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'editProductCategory'])->name('edit-product-category');
+
     Route::post('/add-product', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'addProduct'])->name('add-product');
     Route::post('/edit-product', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'editProduct'])->name('edit-product');
+
     Route::get('/income', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showIncome'])->name('income');
     Route::post('/record-income', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'recordIncome'])->name('record-income');
     Route::get('/expense', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showExpense'])->name('expense');
@@ -182,6 +261,7 @@ Route::group(['prefix'=>'workflow', 'middleware'=>'auth'], function(){
 Route::group(['prefix'=>'newsfeed', 'middleware'=>'auth'], function(){
    Route::get('/', [App\Http\Controllers\Portal\TimelineController::class, 'showTimeline'])->name('timeline');
    Route::post('/publish-timeline-post', [App\Http\Controllers\Portal\TimelineController::class, 'storeTimelinePost'])->name('publish-timeline-post');
+   Route::get('/post/{slug}', [App\Http\Controllers\Portal\TimelineController::class, 'readTimelinePost'])->name('read-timeline-post');
 });
 
 Route::group(['prefix'=>'/bulk-sms', 'middleware'=>'auth'],function(){
@@ -252,8 +332,8 @@ Route::group(['prefix'=>'/newsfeed', 'middleware'=>'auth'], function(){
 
 Route::group(['prefix'=>'/users', 'middleware'=>'auth'], function(){
     Route::get('/practitioners', [App\Http\Controllers\UserController::class, 'showPractitioners'])->name('practitioners');
-    Route::get('/pastors', [App\Http\Controllers\UserController::class, 'showAdministrators'])->name('pastors');
-    Route::get('/pastors/add-new', [App\Http\Controllers\UserController::class, 'showAddNewPastorForm'])->name('add-new-pastor');
+    Route::get('/', [App\Http\Controllers\UserController::class, 'showAdministrators'])->name('pastors');
+    Route::get('/user/add-new', [App\Http\Controllers\UserController::class, 'showAddNewPastorForm'])->name('add-new-pastor');
     Route::get('/{slug}', [App\Http\Controllers\UserController::class, 'showUserProfile'])->name('user-profile');
     Route::post('/assign-revoke-role', [App\Http\Controllers\UserController::class, 'assignRevokeRole'])->name('assign-revoke-role');
     Route::post('/add-new-user', [App\Http\Controllers\UserController::class, 'addNewUser'])->name('add-new-user');

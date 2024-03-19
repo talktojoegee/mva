@@ -24,15 +24,24 @@ class TimelineController extends Controller
         $this->churchbranch = new ChurchBranch();
         $this->region = new Region();
         $this->post = new Post();
+        $this->postcorrespondingpersons = new PostCorrespondingPerson();
     }
 
     public function showTimeline(){
         $branchId = Auth::user()->branch ?? 1;
+        $branchPostIds = $this->postcorrespondingpersons->getCorrespondingPostsByBranch(2,$branchId)
+            ->pluck('pcp_post_id')->toArray(); //branch related
+        $individualPosts = $this->postcorrespondingpersons->getCorrespondingPostsByBranch(4,Auth::user()->id)
+            ->pluck('pcp_post_id')->toArray(); //user related
+        $regionalPosts = $this->postcorrespondingpersons->getCorrespondingPostsByBranch(3,Auth::user()->id)
+            ->pluck('pcp_post_id')->toArray(); //regional
+        $postIds = array_merge($branchPostIds, $individualPosts, $regionalPosts);
+
         return view('timeline.index',[
             'branches'=>$this->churchbranch->getAllChurchBranches(),
             'regions'=>$this->region->getRegions(),
             'users'=>$this->user->getAllBranchUsers($branchId),
-            'posts'=>$this->post->getAllBranchPosts($branchId),
+            'posts'=>$this->post->getPostsByIds($postIds),
         ]);
     }
 
@@ -98,5 +107,35 @@ class TimelineController extends Controller
         }
         session()->flash("success", "Action successful!");
         return back();
+    }
+
+    public function readTimelinePost($slug){
+        $post = $this->post->getPostBySlug($slug);
+        if(empty($post)){
+            abort(404);
+        }
+        $postType = $this->getPostType($post->p_type);
+        $branches = null;
+        $regions = null;
+        $users = null;
+        switch($post->p_scope){
+            case 2:
+                $ids = $this->post->getCorrespondenceByPostId($post->p_id);
+                $branches = $this->churchbranch->getChurchBranchByBranchIds($ids->pcp_target);
+                break;
+            case 4:
+                $ids = $this->post->getCorrespondenceByPostId($post->p_id);
+                $users = $this->user->getUserByIds(json_decode($ids->pcp_target));
+
+        }
+
+        return view('timeline.view',[
+            'post'=>$post,
+            'type'=>$postType,
+            'scope'=>$post->p_scope,
+            'branches'=>$branches,
+            'users'=>$users,
+            'regions'=>$regions
+        ]);
     }
 }

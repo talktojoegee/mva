@@ -127,7 +127,7 @@
                                     <div class="row mt-3">
                                         <div class="col-md-12 col-lg-12 d-flex justify-content-center">
                                             <input type="hidden" name="slug" value="{{ $record->vr_slug }}">
-                                            <button type="submit" class="btn btn-primary  ">Continue to Payment</button>
+                                            <button type="submit" class="btn btn-primary  ">Save & Continue</button>
                                         </div>
                                     </div>
                                 </form>

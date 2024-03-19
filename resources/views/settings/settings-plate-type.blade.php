@@ -48,7 +48,7 @@
                 <div class="col-md-9 mt-4">
                     <div class="d-flex justify-content-between">
                         <div class="h6 text-left text-uppercase text-primary">Manage Plate Types</div>
-                        <button class="btn btn-primary mr-3" data-bs-toggle="modal" data-bs-target="#addBranchModal"> <i class="bx bx-plus-circle"></i> Add LGA Code</button>
+                        <button class="btn btn-primary mr-3" data-bs-toggle="modal" data-bs-target="#addBranchModal"> <i class="bx bx-plus-circle"></i> New Number Plate</button>
                     </div>
                     <div class="container pb-5">
                         <div class="table-responsive mt-3">
@@ -56,43 +56,43 @@
                                 <thead>
                                 <tr>
                                     <th class="">#</th>
-                                    <th class="wd-15p">LGA Name</th>
-                                    <th class="wd-15p">LGA Code</th>
+                                    <th class="wd-15p">Type</th>
+                                    <th class="wd-15p">Cost ({{ env('APP_CURRENCY') }})</th>
                                     <th class="wd-15p">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                               {{-- @foreach($lgas as $key=> $lga)
+                               @foreach($plates as $key=> $plate)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td>{{$lga->lga_name ?? '' }}</td>
-                                        <td>{{$lga->lga_code ?? '' }}</td>
+                                        <td>{{$plate->pt_name ?? '' }}</td>
+                                        <td style="text-align: right;">{{ number_format($plate->pt_cost ?? 0,2)  }}</td>
                                         <td>
-                                            <a class="dropdown-item" href="javascript:void(0);" data-bs-target="#showMoreModal_{{$lga->lga_id}}" data-bs-toggle="modal"> <i class="bx bx-pencil text-warning"></i> </a>
-                                            <div class="modal right fade" id="showMoreModal_{{$lga->lga_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+                                            <a class="dropdown-item" href="javascript:void(0);" data-bs-target="#showMoreModal_{{$plate->pt_id}}" data-bs-toggle="modal"> <i class="bx bx-pencil text-warning"></i> </a>
+                                            <div class="modal right fade" id="showMoreModal_{{$plate->pt_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-danger text-white" style="border-radius: 0px;">
-                                                            <h6 class="modal-title text-uppercase" id="myModalLabel2_{{$lga->lga_id}}">Edit LGA</h6>
+                                                            <h6 class="modal-title text-uppercase" id="myModalLabel2_{{$plate->pt_id}}">Edit Plate Type</h6>
                                                             <button type="button"  class="btn-close text-white" style="margin: 0px; padding: 0px;" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
 
                                                         <div class="modal-body">
-                                                            <form autocomplete="off" autcomplete="off" action="{{route('edit-lga')}}" method="post" data-parsley-validate="">
+                                                            <form autocomplete="off" autcomplete="off" action="{{route('edit-plate-type')}}" method="post" data-parsley-validate="">
                                                                 @csrf
                                                                 <div class="form-group mt-3">
-                                                                    <label for="">LGA Name <span class="text-danger">*</span></label>
-                                                                    <input type="text" value="{{$lga->lga_name ?? '' }}" name="lgaName" required placeholder="LGA Name" data-parsley-required-message="What will you call this LGA?" class="form-control">
-                                                                    @error('lgaName') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    <label for="">Plate Type<span class="text-danger">*</span></label>
+                                                                    <input type="text" value="{{$plate->pt_name ?? '' }}" name="plateType" required placeholder="Plate Type" data-parsley-required-message="Enter plate type" class="form-control">
+                                                                    @error('plateType') <i class="text-danger">{{$message}}</i>@enderror
                                                                 </div>
                                                                 <div class="form-group mt-3">
-                                                                    <label for=""> LGA Code <span class="text-danger">*</span></label>
-                                                                    <input type="text" value="{{$lga->lga_code ?? '' }}" name="lgaCode" required placeholder="LGA Code" data-parsley-required-message="Enter LGA Code" class="form-control">
-                                                                    @error('lgaCode') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    <label for=""> Cost <span class="text-danger">*</span></label>
+                                                                    <input type="text" value="{{$plate->pt_cost ?? '' }}" name="cost" required placeholder="Cost" data-parsley-required-message="Enter plate cost" class="form-control">
+                                                                    @error('cost') <i class="text-danger">{{$message}}</i>@enderror
                                                                 </div>
                                                                 <div class="form-group d-flex justify-content-center mt-3">
                                                                     <div class="btn-group">
-                                                                        <input type="hidden" name="lgaId" value="{{$lga->lga_id}}">
+                                                                        <input type="hidden" name="plateId" value="{{$plate->pt_id}}">
                                                                         <button type="submit" class="btn btn-primary  waves-effect waves-light">Save changes <i class="bx bx-save"></i> </button>
                                                                     </div>
                                                                 </div>
@@ -104,7 +104,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach--}}
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -124,18 +124,18 @@
                 </div>
 
                 <div class="modal-body">
-                    <form autocomplete="off" autcomplete="off" action="{{route('lgas-settings')}}" method="post" id="addBranch" data-parsley-validate="">
+                    <form autocomplete="off" autcomplete="off" action="{{route('plate-type')}}" method="post" id="addBranch" data-parsley-validate="">
                         @csrf
 
                         <div class="form-group mt-3">
-                            <label for="">LGA Name <span class="text-danger">*</span></label>
-                            <input type="text" name="lgaName" required placeholder="LGA Name" data-parsley-required-message="What will you call this LGA?" class="form-control">
-                            @error('lgaName') <i class="text-danger">{{$message}}</i>@enderror
+                            <label for="">Plate Type <span class="text-danger">*</span></label>
+                            <input type="text" name="plateType" required placeholder="Plate Type" data-parsley-required-message="Enter plate type" class="form-control">
+                            @error('plateType') <i class="text-danger">{{$message}}</i>@enderror
                         </div>
                         <div class="form-group mt-3">
-                            <label for=""> LGA Code <span class="text-danger">*</span></label>
-                            <input type="text" name="lgaCode" required placeholder="LGA Code" data-parsley-required-message="Enter LGA Code" class="form-control">
-                            @error('lgaCode') <i class="text-danger">{{$message}}</i>@enderror
+                            <label for=""> Cost <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" name="cost" required placeholder="Cost" data-parsley-required-message="Enter cost" class="form-control">
+                            @error('cost') <i class="text-danger">{{$message}}</i>@enderror
                         </div>
                         <div class="form-group d-flex justify-content-center mt-3">
                             <div class="btn-group">

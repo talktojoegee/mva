@@ -48,7 +48,7 @@
                 <div class="col-md-9 mt-4">
                     <div class="d-flex justify-content-between">
                         <div class="h6 text-left text-uppercase text-primary">Manage  MLOs</div>
-                        <button class="btn btn-primary mr-3" data-bs-toggle="modal" data-bs-target="#addBranchModal"> <i class="bx bx-plus-circle"></i> Add LGA Code</button>
+                        <button class="btn btn-primary mr-3" data-bs-toggle="modal" data-bs-target="#addBranchModal"> <i class="bx bx-plus-circle"></i> Create New</button>
                     </div>
                     <div class="container pb-5">
                         <div class="table-responsive mt-3">
@@ -56,12 +56,90 @@
                                 <thead>
                                 <tr>
                                     <th class="">#</th>
-                                    <th class="wd-15p">LGA Name</th>
-                                    <th class="wd-15p">LGA Code</th>
+                                    <th class="wd-15p">MLO ID</th>
+                                    <th class="wd-15p">Name</th>
+                                    <th class="wd-15p">Email</th>
+                                    <th class="wd-15p">Phone No.</th>
+                                    <th class="wd-15p">Station</th>
                                     <th class="wd-15p">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+
+                                    @foreach($mlos as $key => $mlo)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $mlo->ms_mlo_id ?? '' }}</td>
+                                            <td>{{ $mlo->ms_first_name ?? '' }} {{ $mlo->ms_last_name ?? '' }} {{ $mlo->ms_other_names ?? '' }}</td>
+                                            <td>{{ $mlo->ms_email ?? '' }}</td>
+                                            <td>{{ $mlo->ms_phone_no ?? '' }}</td>
+                                            <td>{{ $mlo->getStation->name ?? '' }}</td>
+                                            <td>
+                                                <a href="javascript:void(0);" data-bs-target="#editGroup_{{$mlo->ms_id}}" data-bs-toggle="modal"> <i class=" bx bx-pencil text-warning"></i> </a>
+                                                <div class="modal fade" id="editGroup_{{$mlo->ms_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header" >
+                                                                <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <h4 class="modal-title" id="myModalLabel2">Edit MLO Setup</h4>
+                                                            </div>
+
+                                                            <div class="modal-body">
+                                                                <form action="{{route('edit-product-category')}}" method="post" autocomplete="off">
+                                                                    @csrf
+                                                                    <div class="form-group mt-3">
+                                                                        <label for="">Station <span class="text-danger">*</span></label>
+                                                                        <select name="station" id="station"  class="form-control">
+                                                                            <option disabled selected>-- Select station --</option>
+                                                                            @foreach($stations as $station)
+                                                                                <option value="{{$station->id}}" {{ $station->id == $mlo->ms_station ? 'selected' : null }}>{{ $station->name ?? '' }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('station') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group mt-3">
+                                                                        <label for=""> MLO ID <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="mloId" value="{{ $mlo->ms_mlo_id  ?? '' }}" required placeholder="MLO ID" data-parsley-required-message="Enter MLO ID" class="form-control">
+                                                                        @error('mloId') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group mt-3">
+                                                                        <label for=""> Last Name <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="lastName" value="{{ $mlo->ms_last_name  ?? '' }}" required placeholder="Last Name" data-parsley-required-message="Enter Last Name" class="form-control">
+                                                                        @error('lastName') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group mt-3">
+                                                                        <label for=""> First Name <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="firstName" value="{{ $mlo->ms_first_name  ?? '' }}" required placeholder="First Name" data-parsley-required-message="First Name" class="form-control">
+                                                                        @error('firstName') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group mt-3">
+                                                                        <label for=""> Other Names <small>(Optional)</small></label>
+                                                                        <input type="text" name="otherNames" value="{{ $mlo->ms_other_names  ?? '' }}" placeholder="Other Names" data-parsley-required-message="Enter Other Names" class="form-control">
+                                                                        @error('otherNames') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group mt-3">
+                                                                        <label for=""> Phone Number <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="phoneNo" value="{{ $mlo->ms_phone_no  ?? '' }}" required placeholder="Phone Number" data-parsley-required-message="Enter Phone Number" class="form-control">
+                                                                        @error('phoneNo') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group mt-3">
+                                                                        <label for=""> Email Address <span class="text-danger">*</span></label>
+                                                                        <input type="email" name="email" value="{{ $mlo->ms_email  ?? '' }}" required placeholder="Email Address" data-parsley-required-message="Enter Email Address" class="form-control">
+                                                                        @error('email') <i class="text-danger">{{$message}}</i>@enderror
+                                                                    </div>
+                                                                    <div class="form-group d-flex justify-content-center mt-3">
+                                                                        <input type="hidden" value="{{$mlo->ms_id}}" name="mloId">
+                                                                        <button type="submit" class="btn btn-primary">Save changes <i class="bx bxs-right-arrow"></i> </button>
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
 
                                 </tbody>
@@ -77,23 +155,37 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" >
-                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Add New MLO</h6>
+                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Add New MLO Setup</h6>
                     <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
                 <div class="modal-body">
-                    <form autocomplete="off" autcomplete="off" action="{{route('lgas-settings')}}" method="post" id="addBranch" data-parsley-validate="">
+                    <form autocomplete="off" autcomplete="off" action="{{route('add-mlo-setup')}}" method="post" id="addBranch" data-parsley-validate="">
                         @csrf
 
                         <div class="form-group mt-3">
-                            <label for="">LGA Name <span class="text-danger">*</span></label>
-                            <input type="text" name="lgaName" required placeholder="LGA Name" data-parsley-required-message="What will you call this LGA?" class="form-control">
-                            @error('lgaName') <i class="text-danger">{{$message}}</i>@enderror
+                            <label for="">Station <span class="text-danger">*</span></label>
+                            <select name="station" id="station"  class="form-control">
+                                <option disabled selected>-- Select station --</option>
+                                @foreach($stations as $station)
+                                    <option value="{{$station->id}}">{{ $station->name ?? '' }}</option>
+                                @endforeach
+                            </select>
+                            @error('station') <i class="text-danger">{{$message}}</i>@enderror
                         </div>
                         <div class="form-group mt-3">
-                            <label for=""> LGA Code <span class="text-danger">*</span></label>
-                            <input type="text" name="lgaCode" required placeholder="LGA Code" data-parsley-required-message="Enter LGA Code" class="form-control">
-                            @error('lgaCode') <i class="text-danger">{{$message}}</i>@enderror
+                            <label for=""> MLO ID <span class="text-danger">*</span></label>
+                            <input type="text" name="mloId" required placeholder="MLO ID" data-parsley-required-message="Enter MLO ID" class="form-control">
+                            @error('mloId') <i class="text-danger">{{$message}}</i>@enderror
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="">User</label>
+                            <select name="user" id="user"
+                                    class="form-control">
+                                <option selected disabled>-- Select --</option>
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->first_name ?? '' }} {{ $user->last_name ?? '' }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group d-flex justify-content-center mt-3">
                             <div class="btn-group">

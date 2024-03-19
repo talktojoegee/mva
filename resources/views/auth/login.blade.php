@@ -7,13 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Health Desk login portal" name="description" />
     <meta content="{{config('app.name')}}" name="author" />
-    <!-- App favicon -->
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
-    <!-- Bootstrap Css -->
     <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
     <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
     <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 </head>
 
@@ -42,12 +38,10 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="text-primary p-4">
-                                    <h5 class="text-primary">Welcome Back !</h5>
-                                    <p>Login to continue to {{config('app.name')}}.</p>
+                                    <h5 class="text-primary">Welcome Back to</h5>
+                                    <h6 class="text-primary">{{env('DEP_STATE')}}</h6>
+                                    <p>{{config('app.name')}}.</p>
                                 </div>
-                            </div>
-                            <div class="col-5 align-self-end">
-                                <img src="/assets/images/profile-img.png" alt="" class="img-fluid">
                             </div>
                         </div>
                     </div>
@@ -56,7 +50,7 @@
                             <a href="#" class="auth-logo-light">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="/assets/images/logo-light.svg" alt="" class="rounded-circle" height="34">
+                                        <img src="/assets/drive/logo/logo.png" alt="{{env('APP_NAME')}}" class="rounded-circle" height="34">
                                     </span>
                                 </div>
                             </a>
@@ -64,7 +58,7 @@
                             <a href="{{route('login')}}" class="auth-logo-dark">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="/assets/images/logo.svg" alt="" class="rounded-circle" height="34">
+                                        <img src="/assets/drive/logo/logo.png" alt="{{env('APP_NAME')}}" class="rounded-circle" height="34">
                                     </span>
                                 </div>
                             </a>
@@ -84,7 +78,6 @@
                                     <label class="form-label">Password</label>
                                     <div class="input-group auth-pass-inputgroup">
                                         <input type="password" name="password" class="form-control" placeholder="Enter Password" aria-label="Password" aria-describedby="password-addon">
-                                        <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                     </div>
                                     @error('password')
                                     <i class="text-danger">{{$message}}</i>

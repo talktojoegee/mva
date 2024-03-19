@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\OkraOpenBankingTrait;
 use App\Models\ActivityLog;
 use App\Models\Automation;
 use App\Models\CashBook;
@@ -27,6 +28,8 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesnMarketingController extends Controller
 {
+    use OkraOpenBankingTrait;
+
     public function __construct(){
         $this->middleware('auth');
         $this->productcategory = new ProductCategory();
@@ -84,16 +87,16 @@ class SalesnMarketingController extends Controller
             'productName'=>'required',
             'productCategory'=>'required',
             'cost'=>'required',
-            'price'=>'required',
-            'photo'=>'required|image|mimes:jpeg,png,gif|max:2048',
+            //'price'=>'required',
+            //'photo'=>'required|image|mimes:jpeg,png,gif|max:2048',
         ],[
             "productName.required"=>"Enter product name",
             "productCategory.required"=>"Select product category",
             "cost.required"=>"What's the cost of this product?",
-            "price.required"=>"How much do you intend selling this product?",
-            "photo.required"=>"Upload a product photo",
-            "photo.mimes"=>"Unsupported file format.",
-            "photo.max"=>"File size exceeds 2MB",
+            //"price.required"=>"How much do you intend selling this product?",
+            //"photo.required"=>"Upload a product photo",
+            //"photo.mimes"=>"Unsupported file format.",
+            //"photo.max"=>"File size exceeds 2MB",
         ]);
         $this->product->addProduct($request);
         session()->flash("success", "Your product was added!");
@@ -104,13 +107,13 @@ class SalesnMarketingController extends Controller
             'productName'=>'required',
             'productCategory'=>'required',
             'cost'=>'required',
-            'price'=>'required',
+            //'price'=>'required',
             'productId'=>'required',
         ],[
             "productName.required"=>"Enter product name",
             "productCategory.required"=>"Select product category",
             "cost.required"=>"What's the cost of this product?",
-            "price.required"=>"How much do you intend selling this product?",
+            //"price.required"=>"How much do you intend selling this product?",
         ]);
         $this->product->editProduct($request);
         session()->flash("success", "Your changes were saved!");
@@ -118,6 +121,8 @@ class SalesnMarketingController extends Controller
     }
 
     public function showIncome(){
+        //$r = $this->okraAuth();
+        //return dd($r);
         $branchId = Auth::user()->branch;
         return view('income.index',[
             'accounts'=>$this->cashbookaccount->getBranchAccounts($branchId),
